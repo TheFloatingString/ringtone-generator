@@ -5,8 +5,10 @@ from numpy import ones
 from numpy import vstack
 from numpy.random import randn
 from numpy.random import randint
+import tensorflow as tf
+import keras
 from keras.datasets.mnist import load_data
-from keras.optimizers import Adam
+# from keras.optimizers import Adam
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import Reshape
@@ -16,6 +18,9 @@ from keras.layers import Conv2DTranspose
 from keras.layers import LeakyReLU
 from keras.layers import Dropout
 from matplotlib import pyplot
+
+# Adam = keras.optimizers.Adam()
+# Adam = tf.keras.optimizers.Adam()
 
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1)):
@@ -29,8 +34,8 @@ def define_discriminator(in_shape=(28,28,1)):
 	model.add(Flatten())
 	model.add(Dense(1, activation='sigmoid'))
 	# compile model
-	opt = Adam(lr=0.0002, beta_1=0.5)
-	model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
+	# opt = Adam(lr=0.0002, beta_1=0.5)
+	model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['accuracy'])
 	return model
 
 # define the standalone generator model
@@ -61,8 +66,8 @@ def define_gan(g_model, d_model):
 	# add the discriminator
 	model.add(d_model)
 	# compile model
-	opt = Adam(lr=0.0002, beta_1=0.5)
-	model.compile(loss='binary_crossentropy', optimizer=opt)
+	# opt = Adam(lr=0.0002, beta_1=0.5)
+	model.compile(loss='binary_crossentropy', optimizer="adam")
 	return model
 
 # load and prepare mnist training images
