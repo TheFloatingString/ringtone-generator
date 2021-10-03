@@ -20,6 +20,8 @@ class TunaMidiReader:
 
 		self.vector_list_of_notes = [[Note.start, Note.end, Note.pitch, Note.velocity] for Note in self.list_of_notes]
 
+		self.vector_list_of_notes = sorted(self.vector_list_of_notes, key=lambda x: x[0])
+
 	def return_list_of_notes(self):
 		return self.list_of_notes
 
