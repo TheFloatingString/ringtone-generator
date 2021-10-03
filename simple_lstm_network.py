@@ -22,49 +22,30 @@ Ringtone qualities:
 y = <Load preprocessed MIDI sounds as truth data in (n, 4) format>
 """
 
-
 list_of_files = glob.glob("static/input-midi-files/*.mid")
 
 raw_ringtones = []
 
 for filename in list_of_files:
-
-	tuna_obj = TunaMidiReader()
-	tuna_obj.read_midi_file(filename)
-	raw_ringtones.append((tuna_obj.return_vector_list_of_notes()))
-
-
-
+    tuna_obj = TunaMidiReader()
+    tuna_obj.read_midi_file(filename)
+    raw_ringtones.append((tuna_obj.return_vector_list_of_notes()))
 
 window_size = 5
 
 X_data = []
 y_data = []
 
-# for ringtone in raw_ringtones:
-
-song = []
-labels = []
-
 ringtone = raw_ringtones[0]
 
+
 for index, item in enumerate(ringtone):
-	if index + window_size < len(ringtone):
-		song.append(ringtone[index:index+window_size])
-		labels.append([ringtone[index + window_size]])
+    if index + window_size < len(ringtone):
+        X_data.append(ringtone[index:index + window_size])
+        y_data.append([ringtone[index + window_size]])
 
-	#X_data.append(song)
-	#y_data.append(labels)
-
-X_data = numpy.array(song)
-print(X_data)
-print(X_data.shape)
-
+X_data = numpy.array(X_data)
 X_data = numpy.reshape(X_data, (len(X_data), window_size, 4))
-
-
-
-
 
 # note_length = 100
 
@@ -76,7 +57,7 @@ X_data = numpy.reshape(X_data, (len(X_data), window_size, 4))
 
 # define the LSTM model
 model = Sequential()
-model.add(LSTM(256, input_shape=(245, 5, 4)))
+model.add(LSTM(256, input_shape=(155, 5, 4)))
 model.add(Dropout(0.2))
 model.add(Dense(4, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam')
@@ -86,7 +67,7 @@ filepath = "weights-improvement-{epoch:02d}-{loss:.4f}.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True, mode='min')
 callbacks_list = [checkpoint]
 # fit the model
-model.fit(X_data[0], y_data[0], epochs=20, batch_size=10, callbacks=callbacks_list)
+model.fit(X_data, y_data, epochs=20, batch_size=10, callbacks=callbacks_list)
 
 '''
 Now let's generate some ringtones using our model!
