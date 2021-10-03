@@ -17,6 +17,7 @@ class TunaMidiReader:
 		for i in tuna_mido_obj.instruments:
 			for note in i.notes:
 				self.list_of_notes.append(note)
+			break
 
 		self.vector_list_of_notes = [[Note.start, Note.end, Note.pitch, Note.velocity] for Note in self.list_of_notes]
 
