@@ -31,7 +31,7 @@ print(y)
 model = Sequential()
 model.add(LSTM(256, input_shape=(X.shape[1], X.shape[2])))
 model.add(Dropout(0.2))
-model.add(Dense(y.shape[1], activation='softmax'))
+model.add(Dense(4, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam')
 
 # define the checkpoint
@@ -55,15 +55,16 @@ length = 1.0
 uplifting = 1.0
 complexity = 1.0
 urgency = 1.0
-noise = numpy.random.randint(0, 1)
 
-output = []
+random_note = numpy.random.random(4, )
+
+justin_note = numpy.array([length, uplifting, complexity, urgency])
+output_notes = [numpy.concatenate([justin_note, random_note])]
 
 # generate notes
 for i in range(1000):
-    X_test = numpy.array([length, uplifting, complexity, urgency, noise])
-    prediction = model.predict(X_test, verbose=0)
-    output.append(prediction)
+    prediction = model.predict(output_notes, verbose=0)
+    output_notes.append(numpy.concatenate([justin_note, prediction]))
 
 print("\nDone.")
-print(numpy.array(output).shape)
+print(numpy.array(output_notes).shape)
