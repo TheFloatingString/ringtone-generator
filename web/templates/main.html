@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Genera-tone</title>
+</head>
+<body style="display: flex; align-content: center; justify-content: center">
+    <div>
+        <h2>Welcome to Genera-tone</h2>
+
+        <form method="post" action="{{ url_for('main') }}">
+            <button type="submit">Click here to generate a new ringtone!</button>
+        </form>
+
+        <br/>
+        <br/>
+
+        {% if ringtone %}
+            <audio controls>
+                <source src="{{ url_for("static", filename=ringtone) }}" />
+            </audio>
+        {% endif %}
+    </div>
+</body>
+</html>
